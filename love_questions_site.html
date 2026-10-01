@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إلى أجمل شخص ❤️</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0; min-height:100vh; font-family:Tahoma,Arial,sans-serif;
+ background:linear-gradient(135deg,#160b18,#3a1028,#180b22);
+ color:#fff; overflow-x:hidden;
+}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.heart{position:absolute;bottom:-40px;font-size:20px;animation:up 7s linear infinite;opacity:.65}
+@keyframes up{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
+.container{width:min(92%,620px);margin:auto;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 0}
+.card{
+ width:100%;padding:30px 22px;border:1px solid rgba(255,255,255,.12);
+ background:rgba(255,255,255,.08);backdrop-filter:blur(14px);
+ border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center
+}
+h1{font-size:31px;margin:8px 0 14px}
+h2{font-size:25px;margin:8px 0 18px}
+p{font-size:17px;line-height:1.9;color:#f5dce8}
+.emoji{font-size:58px;margin-bottom:5px}
+button{
+ width:100%;border:0;border-radius:18px;padding:15px;margin-top:12px;
+ font-size:17px;font-weight:bold;cursor:pointer;color:#fff;
+ background:linear-gradient(90deg,#ff477e,#ff7a59);
+ box-shadow:0 8px 20px rgba(255,71,126,.22);transition:.2s
+}
+button:active{transform:scale(.97)}
+.option{background:rgba(255,255,255,.1);box-shadow:none;border:1px solid rgba(255,255,255,.12)}
+.progress{height:7px;background:rgba(255,255,255,.12);border-radius:20px;margin:10px 0 22px;overflow:hidden}
+.bar{height:100%;width:0;background:#ff5c8a;transition:.4s}
+.small{font-size:13px;color:#d9b8c8}
+.hidden{display:none}
+.result{font-size:30px;color:#ff8db0;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<div class="container">
+<div class="card">
+
+<section id="start">
+ <div class="emoji">❤️</div>
+ <h1>إلى أجمل شخص دخل حياتي</h1>
+ <p>وجودك في حياتي كان من أجمل الأشياء التي حصلت لي.<br>
+ واليوم عندي ليكِ شوية أسئلة... جاوبي بصراحة 😌</p>
+ <button onclick="startQuiz()">ابدئي الرحلة ❤️</button>
+</section>
+
+<section id="quiz" class="hidden">
+ <div class="small" id="counter"></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <h2 id="question"></h2>
+ <div id="answers"></div>
+</section>
+
+<section id="end" class="hidden">
+ <div class="emoji">💖</div>
+ <h1>وصلتِ للنهاية!</h1>
+ <p>لكن الحقيقة؟ الأسئلة كانت مجرد حجة حتى أقول لكِ شيئاً ❤️</p>
+ <div class="result">100% ❤️</div>
+ <p>
+ أنا سعيد جداً لأنك دخلتِ حياتي، وأتمنى أن تظل بيننا دائماً
+ الذكريات الجميلة والضحكات والمواقف التي تجعل أيامنا أحلى.
+ </p>
+ <p><b>مهما كان جوابك... وجودك عندي هو أجمل إجابة. ❤️</b></p>
+ <button onclick="restart()">نبدأ من جديد 🔄</button>
+</section>
+
+</div>
+</div>
+
+<script>
+const questions=[
+ {q:"من 1 إلى 10... كم تحبينني؟ ❤️",a:["10 طبعاً 😌","أكثر من 10 ❤️","خليني أفكر 😂"]},
+ {q:"ما أكثر شيء تحبينه في شخصيتي؟",a:["طريقتي معك ❤️","ضحكي وهبالي 😂","كل شيء فيني 😌"]},
+ {q:"لو قضينا يوماً كاملاً معاً، ماذا تختارين؟",a:["نخرج ونتمشى 🌿","فيلم وأكل 🍿","أي شيء... المهم معك ❤️"]},
+ {q:"لو زعلنا من بعض، من سيصالح الثاني أولاً؟ 😂",a:["أنا 😭","أنت طبعاً 😂","نتخاصم 5 دقائق وبعدين نضحك ❤️"]},
+ {q:"تخيلي أننا أصبحنا مشغولين جداً في المستقبل... ماذا تفعلين؟",a:["أحافظ على التواصل ❤️","نحدد وقتاً لنا","أرسل لك: اشتقت لك 😌"]},
+ {q:"لو كان حبنا أغنية، كيف تتخيلينها؟ 🎵",a:["هادئة ورومانسية","مضحكة ومجنونة 😂","مزيج من الاثنين ❤️"]},
+ {q:"ما الشيء الذي يمكن أن يغير مزاجك بسرعة؟",a:["كلمة حلوة ❤️","أكلة أحبها 😂","ضحكة من شخص أحبه"]},
+ {q:"لو أعطيتك هدية بدون مناسبة، ماذا تتوقعين؟ 🎁",a:["وردة 🌹","شيء أتذكر أنك تحبينه","مفاجأة لا أتوقعها 😍"]},
+ {q:"سؤال صريح 😏... هل تتخيلين أن تستمر علاقتنا لسنوات طويلة؟",a:["أكيد ❤️","أتمنى ذلك جداً","السؤال ده محتاج حضن 😂"]},
+ {q:"آخر سؤال... هل أنتِ سعيدة لأنك دخلتِ حياتي؟ ❤️",a:["جداً ❤️","أكيد طبعاً","أيوة، وأنت محظوظ بي 😂"]}
+];
+
+let i=0;
+function startQuiz(){
+ document.getElementById("start").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ show();
+}
+function show(){
+ const x=questions[i];
+ document.getElementById("counter").textContent=`السؤال ${i+1} من ${questions.length} ❤️`;
+ document.getElementById("question").textContent=x.q;
+ document.getElementById("bar").style.width=((i+1)/questions.length*100)+"%";
+ const box=document.getElementById("answers"); box.innerHTML="";
+ x.a.forEach(ans=>{
+   const b=document.createElement("button");
+   b.className="option"; b.textContent=ans;
+   b.onclick=next; box.appendChild(b);
+ });
+}
+function next(){
+ i++;
+ if(i<questions.length) show();
+ else{
+   document.getElementById("quiz").classList.add("hidden");
+   document.getElementById("end").classList.remove("hidden");
+   burst();
+ }
+}
+function restart(){
+ i=0;
+ document.getElementById("end").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ show();
+}
+function burst(){
+ for(let n=0;n<18;n++){
+  const h=document.createElement("div"); h.className="heart"; h.textContent="❤️";
+  h.style.left=Math.random()*100+"%"; h.style.animationDuration=(3+Math.random()*4)+"s";
+  document.getElementById("hearts").appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+ }
+}
+setInterval(()=>{
+ const h=document.createElement("div");h.className="heart";h.textContent=["❤️","💗","💕","✨"][Math.floor(Math.random()*4)];
+ h.style.left=Math.random()*100+"%";h.style.animationDuration=(5+Math.random()*5)+"s";
+ document.getElementById("hearts").appendChild(h);setTimeout(()=>h.remove(),10000);
+},700);
+</script>
+</body>
+</html>
